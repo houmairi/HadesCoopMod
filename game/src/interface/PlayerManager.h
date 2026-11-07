@@ -10,10 +10,11 @@
 #include "allocator.h"
 #include "../../libs/EASTL-forge1.51/vector.h"
 
+class PlayerManagerExtension;
 namespace SGG {
 
 class PlayerManager {
-    friend class PlayerManagerExtension;
+    friend class ::PlayerManagerExtension;
 
   public:
     static PlayerManager *Instance() {

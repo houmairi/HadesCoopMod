@@ -17,6 +17,7 @@ class GameData {
     HashGuid mName;
     HashGuid mOrganization;
     HashGuid mInheritFrom;
+    uint32_t _padEnd; // explicit tail padding: keeps derived layouts identical under MSVC and Itanium (MinGW) ABIs
 };
 static_assert(sizeof(GameData) == 0x18, "Incorrect SGG::GameData size");
 } // namespace SGG

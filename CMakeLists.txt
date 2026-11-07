@@ -14,6 +14,11 @@ add_subdirectory(libs/lua-5.2.2)
 
 add_subdirectory(game)
 
+if(MINGW)
+    # Match MSVC file names: the game ships lua52.dll, not liblua52.dll
+    set_target_properties(liblua HadesCoopGame PROPERTIES PREFIX "" IMPORT_PREFIX "")
+endif()
+
 install(TARGETS HadesCoopGame
         RUNTIME
         DESTINATION ${CMAKE_SOURCE_DIR}/bin
