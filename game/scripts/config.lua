@@ -56,6 +56,9 @@ local Config = {
         Thickness = 2,
         Threshold = 0.6,
     };
+    -- HUD of players 2-4 is stacked in the bottom-right corner: P2 lowest, P3 above it, P4 on top.
+    -- Vertical distance between the rows, in pixels (screen is 1920x1080).
+    PlayerHudRowSpacing = 140,
     TextAbovePlayersEnabled = false;
     TextAbovePlayersParams = {
         -- CreateTextBox params
@@ -75,6 +78,8 @@ local Config = {
         OneHit = false,
         P1GodMode = false,
         P2GodMode = false,
+        P3GodMode = false,
+        P4GodMode = false,
     }
 }
 

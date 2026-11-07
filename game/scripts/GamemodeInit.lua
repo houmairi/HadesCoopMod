@@ -7,8 +7,8 @@
 local HookUtils = ModRequire "HookUtils.lua"
 ---@type CoopPlayers
 local CoopPlayers = ModRequire "CoopPlayers.lua"
----@type SecondPlayerUi
-local SecondPlayerUi = ModRequire "SecondPlayerUI.lua"
+---@type PlayerUi
+local PlayerUi = ModRequire "PlayerUI.lua"
 ---@type HeroContext
 local HeroContext = ModRequire "HeroContext.lua"
 ---@type CoopCamera
@@ -86,7 +86,7 @@ OnAnyLoad {
                 for playerId = 2, CoopPlayers.GetPlayersCount() do
                     CoopPlayers.InitCoopUnit(playerId)
                 end
-                SecondPlayerUi.Refresh()
+                PlayerUi.Refresh()
             end)
         end
     end

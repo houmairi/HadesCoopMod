@@ -7,8 +7,8 @@
 local CoopPlayers = ModRequire "../CoopPlayers.lua"
 ---@type HeroContext
 local HeroContext = ModRequire "../HeroContext.lua"
----@type SecondPlayerUi
-local SecondPlayerUi = ModRequire "../SecondPlayerUI.lua"
+---@type PlayerUi
+local PlayerUi = ModRequire "../PlayerUI.lua"
 ---@type HeroContextWrapper
 local HeroContextWrapper = ModRequire "../HeroContextWrapper.lua"
 ---@type HookUtils
@@ -32,11 +32,7 @@ function OnHit(args)
             return
         end
 
-        if Config.Debug.P1GodMode and isVictimPlayer and victim == CoopPlayers.GetHero(1) then
-            return
-        end
-
-        if Config.Debug.P2GodMode and isVictimPlayer and victim == CoopPlayers.GetHero(2) then
+        if isVictimPlayer and Config.Debug["P" .. tostring(CoopPlayers.GetPlayerByHero(victim)) .. "GodMode"] then
             return
         end
 
@@ -58,10 +54,11 @@ function OnHit(args)
         end
 
         if isVictimPlayer then
-            if victim == CoopPlayers.GetMainHero() then
+            local ui = PlayerUi.ForHero(victim)
+            if ui then
+                ui.UpdateHealthUI()
+            elseif victim == CoopPlayers.GetMainHero() then
                 UpdateHealthUI()
-            elseif victim == CoopPlayers.GetHero(2) then
-                SecondPlayerUi.UpdateHealthUI()
             end
         end
     end }

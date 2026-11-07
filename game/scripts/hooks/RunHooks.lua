@@ -17,8 +17,8 @@ local EnemyAiHooks = ModRequire "EnemyAiHooks.lua"
 local LootHooks = ModRequire "LootHooks.lua"
 ---@type ILootDelivery
 local LootDelivery = ModRequire "../loot/LootInterface.lua"
----@type SecondPlayerUi
-local SecondPlayerUi = ModRequire "../SecondPlayerUI.lua"
+---@type PlayerUi
+local PlayerUi = ModRequire "../PlayerUI.lua"
 ---@type RunEx
 local RunEx = ModRequire "../RunEx.lua"
 ---@type PlayerVisibilityHelper
@@ -125,7 +125,7 @@ function RunHooks.HandleGenericRoom(StartRoomFun, run, currentRoom)
                 CoopPlayers.InitCoopUnit(playerId)
             end
         end
-        SecondPlayerUi.Refresh()
+        PlayerUi.Refresh()
 
         CoopPlayers.UpdateMainHero()
 
@@ -338,7 +338,7 @@ function RunHooks.RestoreUnlockRoomExitsWrapHook(baseFun, run, room)
         end
     end
 
-    SecondPlayerUi.Refresh()
+    PlayerUi.Refresh()
 end
 
 ---@private
