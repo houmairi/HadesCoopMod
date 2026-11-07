@@ -8,7 +8,9 @@
 #include "interface/Player.h"
 #include "interface/InputHandler.h"
 
-constexpr size_t MAX_PLAYERS = 2;
+// The game reserves 2 player slots, but has 4 controller slots (EControllerIndex 0-3; 4 means "none").
+// We grow the game's player vector on demand, so up to 4 players are possible.
+constexpr size_t MAX_PLAYERS = 4;
 
 class PlayerManagerExtension {
   public:
@@ -30,4 +32,7 @@ class PlayerManagerExtension {
     SGG::InputHandler *GetInput(size_t index);
 
     size_t GetPlayersCount() const noexcept;
+
+  private:
+    bool EnsurePlayerSlots(size_t count);
 };

@@ -34,15 +34,35 @@ local function TostringPlayerConfiguration(playerId)
     end
 end
 
+local MAX_PLAYERS = 4
+
 local MENU_STATE = {
     START = 0;
     PLAYER_ONE_SELECTED = 1,
-    PLAYER_TWO_SELECTED = 2,
+    -- 2+ players joined: another gamepad joins, Player 1 starts the game
+    PLAYERS_JOINING = 2,
     INVALID_STATE_SECOND_KEYBOARD = 3,
     INVALID_STATE_SAME_DEVICE = 4,
+    -- MAX_PLAYERS joined: any press starts the game
+    PLAYERS_FULL = 5,
 }
 
 local CURRENT_MENU_STATE
+
+local function PlayersText()
+    local template = GetDisplayName { Text = "CoopMenu_PlayerController" }
+    local lines = {}
+    for playerId = 1, #SelectedGuiControl do
+        local line = string.gsub(template, "%$(%w+)",
+            { PlayerIndex = playerId, Controller = TostringPlayerConfiguration(playerId) })
+        table.insert(lines, line)
+    end
+    return table.concat(lines, "\n")
+end
+
+local function IsSameDevice(a, b)
+    return a.Device == b.Device and a.ControllerId == b.ControllerId
+end
 
 local START_BUTTON_MESSAGES = {
     "Let's play",
@@ -88,17 +108,14 @@ MainMenuAPIAddGamemode("Coop", function(name)
             message:SetTextLocalizationKey("CoopMenu_StartMessage")
             btn:SetTextLocalizationKey("CoopMenu_P1Press")
         elseif state == MENU_STATE.PLAYER_ONE_SELECTED then
-            local template = GetDisplayName { Text = "CoopMenu_PlayerController" }
-            local text = string.gsub(template, "%$(%w+)", { PlayerIndex = 1, Controller = TostringPlayerConfiguration(1) })
-
-            message:SetText(text)
+            message:SetText(PlayersText())
             btn:SetTextLocalizationKey("CoopMenu_P2Press")
-        elseif state == MENU_STATE.PLAYER_TWO_SELECTED then
-            local template = GetDisplayName { Text = "CoopMenu_PlayerController" }
-            local text = string.gsub(template, "%$(%w+)", { PlayerIndex = 1, Controller = TostringPlayerConfiguration(1) })
-            local text2 = string.gsub(template, "%$(%w+)", { PlayerIndex = 2, Controller = TostringPlayerConfiguration(2) })
-
-            message:SetText(text .. "\n" .. text2)
+        elseif state == MENU_STATE.PLAYERS_JOINING then
+            message:SetText(PlayersText())
+            local template = GetDisplayName { Text = "CoopMenu_JoinOrStart" }
+            btn:SetText((string.gsub(template, "%$(%w+)", { PlayerIndex = #SelectedGuiControl + 1 })))
+        elseif state == MENU_STATE.PLAYERS_FULL then
+            message:SetText(PlayersText())
             btn:SetText(START_BUTTON_MESSAGES[math.random(1, #START_BUTTON_MESSAGES)])
         elseif state == MENU_STATE.INVALID_STATE_SECOND_KEYBOARD then
             message:SetTextLocalizationKey("CoopMenu_ErrP1KBOnly")
@@ -112,27 +129,60 @@ MainMenuAPIAddGamemode("Coop", function(name)
         end
     end
 
+    local function StartGame()
+        SetTempRuntimeData("Gamemode", name)
+        SetTempRuntimeData("TN_Coop:control", SelectedGuiControl)
+        MainMenuOpenProfiles()
+    end
+
+    local function StageAfterJoin()
+        if #SelectedGuiControl >= MAX_PLAYERS then
+            SetStage(MENU_STATE.PLAYERS_FULL)
+        else
+            SetStage(MENU_STATE.PLAYERS_JOINING)
+        end
+    end
+
     SetStage(MENU_STATE.START)
 
     btn:AddActivationHandler(function()
         if CURRENT_MENU_STATE == MENU_STATE.START then
-            SelectedGuiControl[1] = GetCurrentControl()
+            SelectedGuiControl = { GetCurrentControl() }
             SetStage(MENU_STATE.PLAYER_ONE_SELECTED)
-        elseif CURRENT_MENU_STATE == MENU_STATE.PLAYER_ONE_SELECTED then
-            SelectedGuiControl[2] = GetCurrentControl()
+        elseif CURRENT_MENU_STATE == MENU_STATE.PLAYER_ONE_SELECTED
+            or CURRENT_MENU_STATE == MENU_STATE.PLAYERS_JOINING then
+            local control = GetCurrentControl()
 
-            if SelectedGuiControl[2].Device == "Keyboard" then
-                SetStage(MENU_STATE.INVALID_STATE_SECOND_KEYBOARD)
-            elseif SelectedGuiControl[1].Device == "Gamepad" and SelectedGuiControl[1].ControllerId == SelectedGuiControl[2].ControllerId then
-                SetStage(MENU_STATE.INVALID_STATE_SAME_DEVICE)
-            else
-                SetStage(MENU_STATE.PLAYER_TWO_SELECTED)
+            -- Player 1 pressing again starts the game (needs at least 2 players)
+            if CURRENT_MENU_STATE == MENU_STATE.PLAYERS_JOINING and IsSameDevice(control, SelectedGuiControl[1]) then
+                StartGame()
+                return
             end
-        elseif CURRENT_MENU_STATE == MENU_STATE.PLAYER_TWO_SELECTED then
-            SetTempRuntimeData("Gamemode", name)
-            SetTempRuntimeData("TN_Coop:control", SelectedGuiControl)
-            MainMenuOpenProfiles()
+
+            if control.Device == "Keyboard" then
+                SetStage(MENU_STATE.INVALID_STATE_SECOND_KEYBOARD)
+                return
+            end
+
+            for _, joined in ipairs(SelectedGuiControl) do
+                if IsSameDevice(control, joined) then
+                    -- An already joined gamepad (not Player 1): ignore the press
+                    if CURRENT_MENU_STATE == MENU_STATE.PLAYER_ONE_SELECTED then
+                        SetStage(MENU_STATE.INVALID_STATE_SAME_DEVICE)
+                    end
+                    return
+                end
+            end
+
+            table.insert(SelectedGuiControl, control)
+            StageAfterJoin()
+        elseif CURRENT_MENU_STATE == MENU_STATE.PLAYERS_FULL then
+            StartGame()
+        elseif #SelectedGuiControl >= 2 then
+            -- Error while more players were joining: keep the players who already joined
+            StageAfterJoin()
         else
+            SelectedGuiControl = {}
             SetStage(MENU_STATE.START)
         end
     end)

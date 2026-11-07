@@ -20,6 +20,10 @@
                 DisplayName = "Player 2 press this button"
                 },
                 {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
+                },
+                {
                 Id = "CoopMenu_ErrP1KBOnly"
                 DisplayName = "Only player 1 can use a keyboard"
                 },
@@ -63,6 +67,10 @@
                 {
                 Id = "CoopMenu_P2Press"
                 DisplayName = "Второй игрок, нажми сюда"
+                },
+                {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
                 },
                 {
                 Id = "CoopMenu_ErrP1KBOnly"
@@ -110,6 +118,10 @@
                     DisplayName = "Spieler 2, drücke diese Taste"
                 },
                 {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
+                },
+                {
                     Id = "CoopMenu_ErrP1KBOnly"
                     DisplayName = "Nur Spieler 1 kann eine Tastatur verwenden"
                 },
@@ -153,6 +165,10 @@
                 {
                     Id = "CoopMenu_P2Press"
                     DisplayName = "Jugador 2, presiona este botón"
+                },
+                {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
                 },
                 {
                     Id = "CoopMenu_ErrP1KBOnly"
@@ -200,6 +216,10 @@
                     DisplayName = "Joueur 2, appuyez ici"
                 },
                 {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
+                },
+                {
                     Id = "CoopMenu_ErrP1KBOnly"
                     DisplayName = "Seul le joueur 1 peut utiliser un clavier"
                 },
@@ -243,6 +263,10 @@
                 {
                     Id = "CoopMenu_P2Press"
                     DisplayName = "Giocatore 2, premi questo pulsante"
+                },
+                {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
                 },
                 {
                     Id = "CoopMenu_ErrP1KBOnly"
@@ -290,6 +314,10 @@
                     DisplayName = "Gracz 2, naciśnij ten przycisk"
                 },
                 {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
+                },
+                {
                     Id = "CoopMenu_ErrP1KBOnly"
                     DisplayName = "Tylko gracz 1 może używać klawiatury"
                 },
@@ -333,6 +361,10 @@
                 {
                     Id = "CoopMenu_P2Press"
                     DisplayName = "Jogador 2, pressione aqui"
+                },
+                {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
                 },
                 {
                     Id = "CoopMenu_ErrP1KBOnly"
@@ -380,6 +412,10 @@
                     DisplayName = "プレイヤー2、ここを押してください"
                 },
                 {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
+                },
+                {
                     Id = "CoopMenu_ErrP1KBOnly"
                     DisplayName = "キーボードはプレイヤー1のみ使用可能"
                 },
@@ -425,6 +461,10 @@
                     DisplayName = "玩家2请按此按钮"
                 },
                 {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
+                },
+                {
                     Id = "CoopMenu_ErrP1KBOnly"
                     DisplayName = "仅玩家1可使用键盘"
                 },
@@ -468,6 +508,10 @@
                 {
                     Id = "CoopMenu_P2Press"
                     DisplayName = "플레이어 2, 여기를 누르세요"
+                },
+                {
+                Id = "CoopMenu_JoinOrStart"
+                DisplayName = "Player $PlayerIndex press to join / Player 1 press to start"
                 },
                 {
                     Id = "CoopMenu_ErrP1KBOnly"

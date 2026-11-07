@@ -94,15 +94,25 @@ function CoopPlayers.GetUnits()
     return out
 end
 
-function CoopPlayers.InitCoopPlayer()
-    local playerId = 2
+-- Number of players chosen in the co-op menu (2-4)
+function CoopPlayers.GetConfiguredPlayersCount()
+    local ok, controls = pcall(function() return eat_true(GetTempRuntimeData("TN_Coop:control")) end)
+    local count = (ok and type(controls) == "table") and #controls or 2
+    return math.max(2, math.min(count, 4))
+end
 
-    if not CoopHasPlayer(playerId) then
-        playerId = CoopCreatePlayer()
-        CoopControl.InitControlSchemas()
+function CoopPlayers.InitCoopPlayer()
+    local created = false
+    for playerId = 2, CoopPlayers.GetConfiguredPlayersCount() do
+        if not CoopHasPlayer(playerId) then
+            CoopCreatePlayer()
+            created = true
+        end
     end
 
-    return playerId
+    if created then
+        CoopControl.InitControlSchemas()
+    end
 end
 
 ---@return boolean
