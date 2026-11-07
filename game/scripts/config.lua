@@ -56,6 +56,10 @@ local Config = {
         Thickness = 2,
         Threshold = 0.6,
     };
+    -- Camera zoom in co-op rooms, as a factor of the room's normal zoom (1.0 = single-player view).
+    -- Smaller values show more of the room, larger values zoom in on the heroes
+    -- (e.g. 0.75 is easier to see on a TV, but players can leave the screen more easily).
+    CameraZoom = 0.6,
     -- HUD of players 2-4 is stacked in the bottom-right corner: P2 lowest, P3 above it, P4 on top.
     -- Vertical distance between the rows, in pixels (screen is 1920x1080).
     PlayerHudRowSpacing = 140,

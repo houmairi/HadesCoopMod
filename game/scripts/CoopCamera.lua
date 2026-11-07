@@ -9,6 +9,8 @@ local CoopPlayers = ModRequire "CoopPlayers.lua"
 local HookUtils = ModRequire "HookUtils.lua"
 ---@type RunEx
 local RunEx = ModRequire "RunEx.lua"
+---@type CoopModConfig
+local Config = ModRequire "config.lua"
 
 ---@class CoopCamera
 local CoopCamera = {}
@@ -80,10 +82,11 @@ end
 ---@private
 function CoopCamera.CreateRoomWrapHook(baseFunc, ...)
     local room = baseFunc(...)
+    local zoom = Config.CameraZoom or 0.6
     if not room.ZoomFraction then
-        room.ZoomFraction = 0.6
+        room.ZoomFraction = zoom
     elseif room.ZoomFraction > 0.5 then
-        room.ZoomFraction = room.ZoomFraction * 0.6
+        room.ZoomFraction = room.ZoomFraction * zoom
     end
     return room
 end
